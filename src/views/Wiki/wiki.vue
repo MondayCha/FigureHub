@@ -7,24 +7,18 @@
       <div class="heroContent">
         <div style="font-size:200px">wiki</div>
         <div class="card">
-              <div class="card-wrapper">
-                <shop-card :data="card" orientation="vertical"></shop-card>
-          </div>
         </div>
-        <ContentSlot list-width="500" list-height="800"></ContentSlot>
       </div>
     </a-layout>
   </a-layout>
 </template>
 <script>
 import MyHeader from "../layout/myheader";
-import ShopCard from "../../components/shopList/shopCard"
 
 export default {
   name: 'wiki',
   components: {
     MyHeader,
-    ShopCard,
   },
   data() {
     return {

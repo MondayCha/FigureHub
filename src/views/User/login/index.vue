@@ -94,7 +94,8 @@ export default {
             let nickname = res.detail.nickname;
             let type = res.detail.type;
             let avatar = this.$global.staticURL + res.detail.imgpath;
-            this.$store.commit('login', {'nickname': nickname, 'type': type, 'avatar': avatar});
+            let username = res.detail.username;
+            this.$store.commit('login', {'nickname': nickname, 'type': type, 'avatar': avatar, 'username': username});
             console.log(avatar);
             this.showSuccessMessage("登录成功，正在跳转");
             this.$router.back();

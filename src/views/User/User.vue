@@ -1,118 +1,194 @@
 <template>
-  <a-layout>
+  <a-layout style="background-color: #fff">
     <MyHeader></MyHeader>
+    <div class="info">
+      <div class="info-with-avatar">
+        <div class="basic-info">
+          <a-descriptions title="用户信息"
+                          :column="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }"
+                          :colon="false">
+            <a-descriptions-item label="昵称">
+              {{ user.nickname }}
+            </a-descriptions-item>
+            <a-descriptions-item label="用户名">
+              {{ user.username }}
+            </a-descriptions-item>
+            <a-descriptions-item label="用户类型">
+              <template v-if="user.type == '1'">
+                <a-tag color="orange">注册用户</a-tag>
+              </template>
+              <template v-else-if="user.type == '0'">
+                <a-tag color="green">管理员</a-tag>
+              </template>
+              <template v-else="user.type == '1'">
+                <a-tag color="purple">厂商用户</a-tag>
+              </template>
+            </a-descriptions-item>
+          </a-descriptions>
+        </div>
+        <a-avatar class="info-avatar" shape="circle" :size="120" :src="this.$global.staticURL + user.imgpath"/>
+      </div>
+
+      <div class="user-actions">
+        <a-tabs default-active-key="1" @change="tabChangeCallback">
+          <a-tab-pane key="1" tab="用户评论">
+            <CommentList
+                :object_info="this_object_info"
+                :ready="true"
+                :add-model="false"
+            ></CommentList>
+          </a-tab-pane>
+          <a-tab-pane key="2" tab="用户收藏">
+            <status-list></status-list>
+          </a-tab-pane>
+        </a-tabs>
+      </div>
+    </div>
   </a-layout>
-<!--  <div class="video-page-root">-->
-<!--    <div>-->
-<!--      {{this.video_id}}-->
-<!--    </div>-->
-<!--    <template v-if="error_happened">-->
-<!--      <a-result-->
-<!--          status="warning"-->
-<!--          title="视频加载失败"-->
-<!--          sub-title="请确认该视频是否存在，或联系网站管理员"-->
-<!--      >-->
-<!--        <template #extra>-->
-<!--          <a-button key="console" type="primary" @click="onGoHome">-->
-<!--            回到主页-->
-<!--          </a-button>-->
-<!--        </template>-->
-<!--      </a-result>-->
-<!--    </template>-->
-<!--  </div>-->
 </template>
 
 <script>
 import MyHeader from "@/views/layout/myheader";
+import axios_service from "@/api/request";
+import CommentList from "@/components/Comments/CommentList"
+
+const payment_info = {
+  amount: 98,
+  content: "升级高级会员",
+  payment_type: "membership",
+  video_id: 0,
+};
 
 export default {
   components: {
     MyHeader,
+    CommentList
   },
   name: "User",
   data: function () {
     return {
+      payment_info: payment_info,
+      user_id: "",
+      user: {
+        username: String,
+        nickname: String,
+        type: 1,
+        imgpath: String,
+      },
       error_happened: false,
-      video_id: "",
+      buyMembershipShow: false,
+      current_tab: 1,
+      this_object_info: {
+        req_url: 'comment/',
+        obj_key: 'username',
+        obj_id: String,
+      }
     };
   },
   methods: {
     onGoHome() {
-      this.$router.push('/index');
+      this.$router.push("/index")
+    },
+    updatePage() {
+      let _this = this;
+      axios_service.get("user/selectByUsername?username=" + this.user_id, null)
+          .then((res) => {
+            _this.error_happened = false;
+            _this.user = res;
+          })
+          .catch((err) => {
+            _this.error_happened = true;
+          })
+
+    },
+    buyMembership() {
+      this.buyMembershipShow = true;
+    },
+    cancelPayment() {
+      this.buyMembershipShow = false;
+    },
+    tabChangeCallback(key) {
+      this.current_tab = key;
     }
+  },
+  // watch: {
+  //   $route(to, from) {
+  //     if (to.params.router_user_id) {
+  //       this.user_id = to.params.router_user_id;
+  //       this.updatePage();
+  //     }
+  //   }
+  // },
+  beforeMount() {
+    if (this.$route.params.id) {
+      this.user_id = this.$route.params.id;
+      this.error_happened = false;
+    } else {
+      this.user_id = this.$store.state.user.userID;
+      return;
+    }
+    this.this_object_info.obj_id = this.user_id;
+    this.updatePage();
   },
   watch: {
     $route(to, from) {
-      this.video_id = to.params.id;
+      this.user_id = to.params.id;
+      if(!this.user_id){
+        this.user_id = this.$store.state.user.userID;
+      }
+      this.this_object_info.obj_id = this.user_id;
+      this.updatePage();
     }
   },
   created() {
-    this.video_id = this.$route.params.id;
+    this.user_id = this.$route.params.id;
+    if(!this.user_id){
+      this.user_id = this.$store.state.user.userID;
+    }
+    this.this_object_info.obj_id = this.user_id;
+    this.updatePage();
   }
 }
 </script>
 
 <style scoped>
-
-.video-page-root {
-  padding-top: 16px;
-  width: 75%;
-  margin: 0 auto;
-}
-
-.video-info-top {
-  margin-bottom: 8px;
-}
-
-.video-info-title{
-  text-align: left;
-  font-size: 22px;
-  font-weight: bold;
-}
-
-.video-info-subtop {
-  text-align: left;
-  color: #888888;
-}
-
-.info-video-info, .info-author-info, .comments {
-  margin-top: 8px;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 10, 10, 0.15);
-  background-color: #fff;
-}
-
 .info {
+  background-color: #ffffff;
+  margin-left: 64px;
+  margin-right: 64px;
+}
+
+.info-with-avatar {
   display: flex;
   justify-content: space-between;
-  justify-items: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.info-video-info {
-  width: 75%;
-  margin-right: 4px;
+.basic-info {
   text-align: left;
-  font-size: 16px;
-  color: #888888;
+  width: 80%;
+  padding: 16px;
+  box-shadow: 0 4px 8px 0 #0001;
+
+  background-color: #fff;
+  border-radius: 8px;
 }
 
-.info-author-info {
-  width: 25%;
-  margin-left: 4px;
+.info-avatar {
+  background-color: #fff;
+  box-shadow: 0 4px 8px 0 #0001;
 }
 
-.author-nickname{
-  margin: 8px;
-  font-size: 16px;
+.user-actions {
+  box-shadow: 0 1px 4px rgba(0, 10, 10, 0.15);
+  padding: 16px 24px;
+  background-color: #fff;
+  border-radius: 8px;
+  margin: 16px 0px 0px;
 }
 
-.comment-title {
-  margin-top: 16px;
-  font-size: 18px;
-  text-align: left;
-  font-weight: bold;
+.upgrade-button {
+  padding: 0;
 }
-
-
 </style>

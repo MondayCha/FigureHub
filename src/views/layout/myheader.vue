@@ -24,11 +24,9 @@
           <a-menu-item key="3" class="menu-font" style="padding: 0">
             <router-link to="/market">购物</router-link>
           </a-menu-item>
-          <a-menu-item key="4" class="menu-font" style="padding: 0" v-if="this.$store.state.user.type===0">
-            <router-link to="/manage">管理</router-link>
-          </a-menu-item>
-          <a-menu-item key="4" class="menu-font" style="padding: 0" v-else>
-            <router-link to="/aboutus">关于</router-link>
+          <a-menu-item key="4" class="menu-font" style="padding: 0" >
+            <router-link to="/manage" v-if="this.$store.state.user.type!==1">管理</router-link>
+            <router-link to="/aboutus" v-else>关于</router-link>
           </a-menu-item>
         </a-menu>
       </a-layout-header>
@@ -36,7 +34,7 @@
     <a-col span="3">
     </a-col>
     <a-col span="5">
-      <a-input-search placeholder="Fate Stay Night" style="width: 300px; border: 0px" @search="onSearch"/>
+      <a-input-search placeholder="Fate Stay Night" style="width: 300px; color: #f5f5f5;" @search="onSearch"/>
     </a-col>
     <a-col :span="2">
     </a-col>
@@ -95,7 +93,7 @@
               <router-link to="/manage">订单</router-link>
             </a-menu-item>
             <a-menu-item key="7" class="menu-font" style="padding: 0">
-              <router-link to="/manage"><b>发布</b></router-link>
+              <router-link to="/market/create"><b>发布</b></router-link>
             </a-menu-item>
           </a-menu>
         </a-layout-header>
@@ -138,7 +136,7 @@ export default {
       });
     },
     user() {
-      this.$router.push('/User/myspace');
+      this.$router.push('/user/' + this.$store.state.user.userID);
       this.visible = false;
     },
     onLogin() {
@@ -156,18 +154,24 @@ export default {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: myFont;
+  src: url("../../static/fonts/Attractype Reborn.otf") format("opentype");
+}
+
 .myHeader {
   padding: 0px;
   height: 50px;
   position: relative;
   -webkit-box-shadow: 0 1px 1px rgba(18, 18, 18, 0.1);
-  box-shadow: #0002 0 1px 10px 1px;
+  box-shadow: 0 4px 8px 0 #0001;
+  /*box-shadow: #0002 0 1px 4px 1px;*/
   z-index: 10;
   max-width: 100%;
 }
 
 /*box-shadow: 0 1px 1px rgba(18, 18, 18, 0.1);*/
-
+/*box-shadow: #0001 0 1px 1px 1px;*/
 
 #gtcbml {
   height: 50px;

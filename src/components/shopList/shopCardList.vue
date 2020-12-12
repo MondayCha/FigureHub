@@ -17,13 +17,32 @@
 <script>
 import myShopItem from "./shopItem";
 import axios from 'axios';
+import axios_service from "@/api/request";
+
 //import pic from "https://i0.hdslb.com/bfs/sycp/creative_img/202012/b21688b8754e5d8c8ad793072fe38036.jpg@625w_312h.jpg"
+
+function getPosts(goodList) {
+  // 存储所有http请求
+  let reqList = []
+  // 存储后台响应每个请求后的返回结果
+  let resList = []
+
+  for (let i = 0; i < goodList.length; i++) {
+    console.log("getPosts ", goodList[i].merchandiseId);
+    let req = axios.get("merchandiseimg/selectByMerchandiseId?merchandiseId=" + goodList[i].merchandiseId);
+    reqList.push(req)
+    resList.push(('post' + (i + 1)).replace(/[']+/g, ''))
+  }
+
+  return axios.all(reqList).then(axios.spread(function (...resList) {
+    return resList // 拿到所有posts数据
+  }))
+}
 
 export default {
   components: {
     myItem: myShopItem
   },
-
   data() {
     return {
       displayItems: [
@@ -31,6 +50,7 @@ export default {
           picture_id: Number,
           painter_id: Number,
           picture_address: String,
+          owner_url: String,
           uploadTime: String,
           title: String,
         }
@@ -55,6 +75,7 @@ export default {
                 picture_id: Number,
                 painter_id: Number,
                 picture_address: String,
+                owner_url: String,
                 uploadTime: String,
                 title: String,
               },
@@ -68,6 +89,7 @@ export default {
         }
       ],
       pictureWidth: 500,
+      goodList: [],
     }
   },
 
@@ -192,173 +214,56 @@ export default {
       }
     },
 
+    async getCard(goodList) {
+      let posts = await getPosts(goodList);
+      let items = [];
+      for (let i = 0; i < posts.length; i++) {
+        if (posts[i] && posts[i].status === 200) {
+          console.log(posts[i]);
+          let tmpItem = {
+            'title': goodList[i].figureName,
+            'owner': goodList[i].nickname,
+            'picture_address': 'http://localhost:2333/ImgStore/' + posts[i].data[0].imgpath,
+            'owner_url': 'http://localhost:2333/ImgStore/' + goodList[i].imgpath,
+            'price': goodList[i].price,
+            'sale_id': goodList[i].saleId,
+            'figure_id': goodList[i].figureId,
+            'owner_id': goodList[i].username,
+            'merchandise_id': goodList[i].merchandiseId,
+          }
+          items.push(tmpItem)
+        }
+      }
+      // return JSON.stringify(items);
+      return items;
+    },
+
     /***
      * 处理全图片搜集部分
      */
     selectAllPictures() {
       //console.log('准备搜集所有图片...')
       let _this = this;
-      _this.displayItems = [
-        {
-          "picture_id": 6,
-          "painter_id": 2,
-          "picture_address": "http://localhost:8080/static/img/girl_guitar_2560x1024.d1f70db6.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 8,
-          "painter_id": 2,
-          "picture_address": "https://img.cheerfun.dev/c/540x540_70/img-master/img/2020/12/08/01/30/00/86164893_p0_master1200.jpg",
-          "owner": "2020-12-11 ",
-          "title": "kiminodddddddddddddddddddddd"
-        },
-        {
-          "picture_id": 9,
-          "painter_id": 2,
-          "picture_address": "http://localhost:8080/static/img/golden-flower.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 12,
-          "painter_id": 3,
-          "picture_address": "https://i0.hdslb.com/bfs/sycp/creative_img/202012/b21688b8754e5d8c8ad793072fe38036.jpg@625w_312h.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 3,
-          "painter_id": 7,
-          "picture_address": "https://img.cheerfun.dev/c/540x540_70/img-master/img/2020/12/08/00/00/06/86162773_p0_master1200.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 4,
-          "painter_id": 2,
-          "picture_address": "https://img.cheerfun.dev/c/540x540_70/img-master/img/2020/12/08/00/00/18/86162834_p0_master1200.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 21,
-          "painter_id": 6,
-          "picture_address": "https://i0.hdslb.com/bfs/sycp/creative_img/202012/b21688b8754e5d8c8ad793072fe38036.jpg@625w_312h.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 13,
-          "painter_id": 3,
-          "picture_address": "https://img.cheerfun.dev/c/540x540_70/img-master/img/2020/12/09/00/00/00/86181714_p0_master1200.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 19,
-          "painter_id": 6,
-          "picture_address": "https://i0.hdslb.com/bfs/sycp/creative_img/202012/b21688b8754e5d8c8ad793072fe38036.jpg@625w_312h.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 14,
-          "painter_id": 4,
-          "picture_address": "https://i0.hdslb.com/bfs/sycp/creative_img/202012/b21688b8754e5d8c8ad793072fe38036.jpg@625w_312h.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 24,
-          "painter_id": 6,
-          "picture_address": "https://i0.hdslb.com/bfs/sycp/creative_img/202012/b21688b8754e5d8c8ad793072fe38036.jpg@625w_312h.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 20,
-          "painter_id": 6,
-          "picture_address": "https://i0.hdslb.com/bfs/sycp/creative_img/202012/b21688b8754e5d8c8ad793072fe38036.jpg@625w_312h.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 22,
-          "painter_id": 6,
-          "picture_address": "http://localhost:8080/static/img/girl_guitar_2560x1024.d1f70db6.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 2,
-          "painter_id": 7,
-          "picture_address": "https://i0.hdslb.com/bfs/sycp/creative_img/202012/b21688b8754e5d8c8ad793072fe38036.jpg@625w_312h.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 15,
-          "painter_id": 4,
-          "picture_address": "https://i0.hdslb.com/bfs/sycp/creative_img/202012/b21688b8754e5d8c8ad793072fe38036.jpg@625w_312h.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 7,
-          "painter_id": 2,
-          "picture_address": "https://i0.hdslb.com/bfs/sycp/creative_img/202012/b21688b8754e5d8c8ad793072fe38036.jpg@625w_312h.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 11,
-          "painter_id": 3,
-          "picture_address": "https://i0.hdslb.com/bfs/sycp/creative_img/202012/b21688b8754e5d8c8ad793072fe38036.jpg@625w_312h.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 25,
-          "painter_id": 2,
-          "picture_address": "https://img.cheerfun.dev/c/540x540_70/img-master/img/2020/12/09/00/41/25/86182965_p0_master1200.jpg",
-          "owner": "2020-12-11 14:16:17.527",
-          "title": "test2"
-        },
-        {
-          "picture_id": 16,
-          "painter_id": 4,
-          "picture_address": "https://i0.hdslb.com/bfs/sycp/creative_img/202012/b21688b8754e5d8c8ad793072fe38036.jpg@625w_312h.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 23,
-          "painter_id": 6,
-          "picture_address": "https://i0.hdslb.com/bfs/sycp/creative_img/202012/b21688b8754e5d8c8ad793072fe38036.jpg@625w_312h.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-        {
-          "picture_id": 18,
-          "painter_id": 5,
-          "picture_address": "https://i0.hdslb.com/bfs/sycp/creative_img/202012/b21688b8754e5d8c8ad793072fe38036.jpg@625w_312h.jpg",
-          "owner": "2020-12-11 ",
-          "title": "no"
-        },
-      ];
-      //console.log("所有的图片信息为：" + _this.displayItems);
-      //2.列表初始化
-      _this.initialsubList();
-      //3.分配图片
-      for (let i = 0; i < _this.displayItems.length; i++) {
-        _this.imgload(_this.displayItems[i], _this.allocPicture);
-      }
-      //4.若用户已经登录，加载收藏关系
-      if (_this.$store.state.user.userID !== "") {
-        _this.selectAllCollections();
-        _this.allocAllCollectionMessage();
-      }
+      axios_service.get("sale/selectAll", null).then((res) => {
+        console.log("liost is ", res);
+        _this.goodList = res;
+        this.getCard(_this.goodList).then((res) => {
+          _this.displayItems = res;
+          console.log("所有的图片信息为：" + _this.displayItems);
+          //2.列表初始化
+          _this.initialsubList();
+          //3.分配图片
+          for (let i = 0; i < _this.displayItems.length; i++) {
+            _this.imgload(_this.displayItems[i], _this.allocPicture);
+          }
+          //4.若用户已经登录，加载收藏关系
+          if (_this.$store.state.user.userID !== "") {
+            _this.selectAllCollections();
+            _this.allocAllCollectionMessage();
+          }
+        });
+      });
+
       //1.axios获得所有图片
       // axios.get('/pictures/selectAll').then((response) => {
       //   _this.displayItems = response.data;
@@ -423,7 +328,7 @@ export default {
 
       //console.log("准备获得用户所有的收藏图片...");
       //1.axios获得当前用户所有的收藏图片
-      axios.get('/collection/getPictures',{
+      axios.get('/collection/getPictures', {
         params: {
           user_id: _this.$store.state.user.userID,
         }
@@ -503,6 +408,7 @@ export default {
 }
 
 .bg-purple {
+  /*购物页面*/
   background: #ffffff;
 }
 

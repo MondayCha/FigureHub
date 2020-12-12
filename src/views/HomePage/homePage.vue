@@ -22,7 +22,7 @@ export default {
   },
 }
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 
 .img-responsive{
   max-width: 100%;

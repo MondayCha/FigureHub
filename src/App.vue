@@ -22,6 +22,7 @@ export default {
 
 <style lang="scss">
 #app{
+  //background-color: #ffffff;
   height: 100%;
 }
 ::-webkit-scrollbar {

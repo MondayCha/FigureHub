@@ -1,7 +1,7 @@
 <template>
   <a-layout>
     <MyHeader head_index="3"></MyHeader>
-    <a-layout class="back">
+    <a-layout class="market_back">
       <ShopList ref="HomePageList"></ShopList>
     </a-layout>
   </a-layout>
@@ -26,7 +26,7 @@ export default {
 </script>
 
 <style>
-.back {
+.market_back {
   padding-left: 100px;
   padding-right: 100px;
   background-color: #ffffff;

@@ -12,13 +12,14 @@
                 class="up"
                 :class="{'no-face': !owner_url}"
             >
-              <dpi-img v-if="owner_url" class="face" :src="owner_url" :size="24"></dpi-img>
+              <dpi-img v-if="owner_url" class="face" :src="this.picturesMessage.picture.owner_url" :size="24"></dpi-img>
               <div class="name" :title="owner">{{ this.picturesMessage.picture.owner }}</div>
             </div>
           </div>
         </div>
         <div class="right-word-container">
-          <p class="wordOfPrice">2999</p>
+          <span style="font-size:20px; color: #00a0d8; "><b>￥</b></span>
+          <span class="wordOfPrice">{{ this.picturesMessage.picture.price }}</span>
         </div>
       </div>
     </div>
@@ -43,6 +44,7 @@ export default {
         cover_url: null,
         owner_url: null,
         price: -1,
+        sale_id: null,
       },
       collection: {
         user_id: -1,
@@ -70,9 +72,8 @@ export default {
 
   methods: {
     routeJump() {
-      console.log("图片收藏信息: user_id为" + this.picturesMessage.collection.user_id + " picture_id为" + this.picturesMessage.picture.picture_id);
-      console.log("计算属性：" + this.isCollected);
-      this.$router.push('/search/');
+      this.$store.commit('routeToSale', this.picturesMessage.picture);
+      this.$router.push('/market/sale=' + this.picturesMessage.picture.sale_id);
     },
   },
 }
@@ -91,20 +92,21 @@ export default {
 }
 
 .left-word-container {
-  width: 60%;
+  width: 55%;
   height: 100%;
   display: inline-block;
 }
 
 .right-word-container {
-  width: 40%;
+  width: 45%;
   height: 100%;
   display: inline-block;
+  text-align: right;
 }
 
 .wordOfPrice {
   padding-right: 10px;
-  font-family: priceFont, serif;
+  font-family: priceFont, "Microsoft YaHei", Arial;
   color: #fb7299;
   text-align: right;
   font-size: 50px;
@@ -171,24 +173,23 @@ export default {
   font-size: 11pt;
   grid-area: title;
   font-weight: bold;
-  //color: inherit;
   padding: 3px 12px 0;
   overflow: hidden;
   text-overflow: ellipsis; /*文字溢出的部分隐藏并用省略号代替*/
   white-space: nowrap;
   /*文本不自动换行*/
-    justify-self: stretch;
-    text-overflow: ellipsis;
-  }
+  justify-self: stretch;
+  text-overflow: ellipsis;
+}
 
-  .item {
-    box-sizing: border-box;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    padding: 8px;
-    /*padding-bottom: 16px;*/
+.item {
+  box-sizing: border-box;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  /*padding-bottom: 16px;*/
   overflow: hidden;
   /*box-shadow: 0 4px 8px 0 #0001;*/
 }
@@ -201,6 +202,7 @@ export default {
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 4px 8px 0 #0001;
+  background-color: #ffffff;
 }
 
 .item-img {

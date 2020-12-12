@@ -1,25 +1,25 @@
 <template>
   <a-layout>
     <MyHeader head_index="4"></MyHeader>
-    <template v-if="this.$store.state.user.type!==0">
-      <a-result
-          status="warning"
-          title="权限不足"
-          sub-title="如需访问，请联系网站管理员"
-          style="background-color: #ffffff; padding-top: 200px"
-      >
-        <template #extra>
-          <a-button key="console" type="primary" @click="onGoHome" shape="round">
-            回到主页
-          </a-button>
-        </template>
-      </a-result>
-    </template>
-    <template v-else>
+<!--    <template v-if="this.$store.state.user.type===1">-->
+<!--      <a-result-->
+<!--          status="warning"-->
+<!--          title="权限不足"-->
+<!--          sub-title="如需访问，请联系网站管理员"-->
+<!--          style="background-color: #ffffff; padding-top: 200px"-->
+<!--      >-->
+<!--        <template #extra>-->
+<!--          <a-button key="console" type="primary" @click="onGoHome" shape="round">-->
+<!--            回到主页-->
+<!--          </a-button>-->
+<!--        </template>-->
+<!--      </a-result>-->
+<!--    </template>-->
+<!--    <template v-else>-->
       <a-layout class="a-layout">
         <router-view />
       </a-layout>
-    </template>
+<!--    </template>-->
   </a-layout>
 </template>
 <script>

@@ -2,16 +2,16 @@
   <div>
     <div class="flextitle">
       <div>
-        <a-button type="primary" @click="addItem(true)" shape="round">添加</a-button>
+        <a-button type="primary" @click="addItem" shape="round">添加</a-button>
       </div>
-      <div>
+      <div v-if="false">
         <a-input-group style="width: 400px">
-          <a-select default-value="0" style="width: 25%" @change="selectChange">
-            <a-select-option value="0"> 手办名称</a-select-option>
-            <a-select-option value="1"> 对应角色</a-select-option>
+          <a-select default-value="0" style="width: 18%" @change="selectChange">
+            <a-select-option value="0"> 名称</a-select-option>
+            <a-select-option value="1"> 类别</a-select-option>
           </a-select>
           <a-input-search
-              style="width: 75%"
+              style="width: 82%"
               placeholder="请输入要搜索的关键词"
               allow-clear
               enter-button
@@ -23,8 +23,6 @@
     <collection-create-form
         ref="collectionForm"
         :visible="visible"
-        :roleList="roleList"
-        :figureList="figureList"
         @cancel="handleCancel"
         @create="handleCreate"
     />
@@ -35,7 +33,7 @@
           :columns="columns"
           :data-source="data"
           :loading="loading"
-          rowKey="relaId"
+          rowKey="workName"
       >
         <template slot="operation" slot-scope="text, record">
           <a-button type="link" @click="updateModal(record)">修改</a-button>
@@ -44,17 +42,15 @@
               title="确定要删除吗?"
               ok-text="确定"
               cancel-text="取消"
-              @confirm="() => onDelete(record.relaId)"
+              @confirm="() => onDelete(record.workName)"
           >
-            <a href="javascript:;">删除</a>
+            <a-button type="link" click="javascript:;">删除</a-button>
           </a-popconfirm>
         </template>
       </a-table>
       <update-form
           ref="updateForm"
           :visible="updatevisible"
-          :roleList="roleList"
-          :figureList="figureList"
           :recorder="updateRecorder"
           @cancel="updateCancel"
           @create="updateCreate"
@@ -66,6 +62,7 @@
 <script>
 import CollectionCreateForm from "./form/createform.vue";
 import UpdateForm from "./form/updateform.vue";
+import UploadImageForm from "../uploadImageForm"
 import axios from "axios";
 import axios_service from "@/api/request";
 
@@ -73,6 +70,7 @@ export default {
   components: {
     CollectionCreateForm,
     UpdateForm,
+    UploadImageForm,
   },
   data() {
     return {
@@ -81,26 +79,27 @@ export default {
         showTotal: (total) => `共${total}条数据`,
       },
       columns: [
-        // {
-        //   title: "编号",
-        //   dataIndex: "roleId",
-        //   key: "roleId",
-        //   width: "10%",
-        // },
         {
-          title: "手办名称",
-          dataIndex: "figureId",
-          key: "figureId",
-          width: "40%",
+          title: "名称",
+          dataIndex: "workName",
+          key: "workName",
+          width: "15%",
         },
         {
-          title: "对应角色",
-          dataIndex: "roleId",
-          key: "roleId",
+          title: "类别",
+          dataIndex: "kindStr",
+          key: "kindStr",
+          width: "5%",
+        },
+        {
+          title: "介绍",
+          dataIndex: "intro",
+          key: "intro",
+          // width: "45%",
         },
         {
           title: "操作",
-          width: "10%",
+          width: "15%",
           dataIndex: "operation",
           scopedSlots: {
             customRender: "operation",
@@ -113,11 +112,23 @@ export default {
       loading: false,
       searchType: 0,
       updateRecorder: {},
-      roleList: [],
-      figureList: [],
     };
   },
   methods: {
+    formData() {
+      for (let i = 0; i < this.data.length; i++) {
+        let tmp_gender = this.data[i].kind;
+        if (tmp_gender == 0) {
+          this.data[i].kindStr = "动画";
+        } else if (tmp_gender == 1) {
+          this.data[i].kindStr = "漫画";
+        } else if (tmp_gender == 2) {
+          this.data[i].kindStr = "游戏";
+        } else {
+          this.data[i].kindStr = "小说";
+        }
+      }
+    },
     selectChange(value) {
       this.searchType = value;
       console.log(this.searchType);
@@ -132,72 +143,56 @@ export default {
     },
     onDelete(key) {
       console.log(key);
-      axios_service.delete_with_params(this.$store, "/figurization/delete?relaId=" + key, null).then((res) => {
+      axios_service.delete_with_params(this.$store, "/work/delete?workName=" + key, null).then((res) => {
         console.log(res);
         let _this = this;
         _this.loading = true;
         _this.queryTable();
       });
     },
-    addItem(modelOfUpdate) {
-      let _this = this;
-      axios_service.get_with_params(this.$store, "/figure/selectAll", null).then((res1) => {
-        _this.figureList = res1;
-        axios_service.get_with_params(this.$store, "/role/selectAll", null).then((res2) => {
-          _this.roleList = res2;
-          if (modelOfUpdate) {
-            _this.visible = true;
-          } else {
-            _this.updatevisible = true;
-          }
-        }).catch(function (error) {
-          console.log("role fail");
-        });
-      }).catch(function (error) {
-        console.log("figure fail");
-      });
+    addItem() {
+      console.log("show");
+      this.visible = true;
     },
     searchModal(value) {
+      this.$message.error("没写");
+      return ;
       if (!value || value == "") {
         this.queryTable();
-      } else if (this.searchType == 0) {
-        console.log("searchType 0");
-        const params = {
-          figureName: value,
-        };
-        console.log(params);
-        let _this = this;
-        _this.loading = true;
-        axios_service.get("/figurization/selectByFigureName?", params).then((response) => {
-          //将返回的数据存入页面中声明的data中
-          _this.data = response;
-          _this.loading = false;
-        })
-            .catch(function (error) {
-              alert(error);
-            });
       } else {
-        console.log("searchType 1");
-        const params = {
-          roleName: value,
-        };
-        console.log(params);
+        let params = {}
+        let url = ""
+        if (this.searchType == 0) {
+          params = {roleName: value,};
+          url = "/role/selectByName?";
+        } else {
+          let tmp_gender = "0";
+          if (value == "女") {
+            tmp_gender = "2";
+          } else if (value == "男") {
+            tmp_gender = "1";
+          } else {
+            tmp_gender = "0";
+          }
+          params = {gender: tmp_gender,};
+          url = "/role/selectByGender?";
+        }
         let _this = this;
         _this.loading = true;
-        axios_service.get("/figurization/selectByRoleName?", params).then((response) => {
+        axios_service.get_with_params(this.$store, url, params).then((res) => {
           //将返回的数据存入页面中声明的data中
-          _this.data = response;
+          _this.data = res;
+          _this.formData();
           _this.loading = false;
-        })
-            .catch(function (error) {
-              alert(error);
-            });
+        }).catch(function (error) {
+          alert(error);
+        });
       }
     },
     updateModal(record) {
       console.log("record is ", record);
       this.updateRecorder = record;
-      this.addItem(false);
+      this.updatevisible = true;
     },
     handleCancel() {
       this.visible = false;
@@ -206,18 +201,19 @@ export default {
       this.updatevisible = false;
     },
     updateCreate() {
+      this.$message.error("后端可能有bug");
+      return;
       const form = this.$refs.updateForm.form;
       form.validateFields((err, values) => {
         if (err) {
           return;
         }
-        console.log("upodate ", values);
         const params = {
-          relaId: values.relaId,
-          figureId: values.fId,
-          roleId: values.rId,
+          workName: values.workName,
+          kind: values.kind,
+          intro: values.intro,
         };
-        axios_service.put("/figurization/update?", params).then((res) => {
+        axios_service.put_with_params(this.$store, "/work/update?", params).then((res) => {
           console.log(res);
           let _this = this;
           _this.loading = true;
@@ -235,31 +231,33 @@ export default {
         }
         console.log("Received values of form: ", values);
         const params = {
-          figureId: values.fId,
-          roleId: values.rId,
+          workName: values.workName,
+          kind: values.kind,
+          intro: values.intro,
         };
-        let _this = this;
-        axios_service.post_with_params(this.$store, "/figurization/insert?", params).then((res) => {
+        axios_service.post_with_params(this.$store, "/work/insert?", params).then((res) => {
           console.log(res);
+          let _this = this;
           _this.loading = true;
           _this.queryTable();
         });
         form.resetFields();
-        _this.visible = false;
+        this.visible = false;
       });
     },
     queryTable() {
       let _this = this;
       _this.loading = true;
-      axios_service.get("/figurization/selectAll", null).then((response) => {
+      axios_service.get_with_params(this.$store, "/work/selectAll", null).then((res) => {
         //将返回的数据存入页面中声明的data中
-        _this.data = response;
+        _this.data = res;
+        _this.formData();
         _this.loading = false;
       })
           .catch(function (error) {
             console.log("error case!");
             _this.$notification.open({
-              message: "无法获取关系表格数据",
+              message: "无法获取Role表格数据",
               icon: <a-icon type="warning" style="color: #ff1820"/>,
               description:
                   "请检查后端是否正常运行，是否允许跨域；或修改main.js中的axios全局参数，以匹配后端Api",
