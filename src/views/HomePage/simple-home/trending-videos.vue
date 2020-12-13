@@ -1,7 +1,7 @@
 <template>
   <div class="trendings">
     <div class="header">
-      <div class="title">热门</div>
+      <div class="title">上新</div>
       <div class="page">
         <div class="prev-page" @click="scroll(-1)">
           <a-icon type="left" style="font-size: 20px"/>
@@ -30,27 +30,24 @@ export default {
      trendingCards: [
        {
          id:123,
-         coverUrl: "https://i0.hdslb.com/bfs/archive/bd32aee10921815e6cb788858e4c1531609f5132.jpg@625w_312h.jpg",
-         title: "jfdfhjsdhfj",
-         imageUrl: "https://i0.hdslb.com/bfs/sycp/creative_img/202012/29f6dbfb63f6d29025e4bf7501eb6b89.jpg@625w_312h.jpg",
+         coverUrl: "http://localhost:2333/ImgStore/22.jpg",
+         title: "Re：从零开始的异世界生活 艾米莉娅 偶像 Ver.",
+         upname: '眼镜厂',
+         imageUrl: "http://localhost:2333/ImgStore/22.jpg",
        },
        {
          id:123,
-         coverUrl: "https://i0.hdslb.com/bfs/archive/bd32aee10921815e6cb788858e4c1531609f5132.jpg@625w_312h.jpg",
-         title: "jfdfhjsdhfj",
-         imageUrl: "https://i0.hdslb.com/bfs/sycp/creative_img/202012/29f6dbfb63f6d29025e4bf7501eb6b89.jpg@625w_312h.jpg",
+         coverUrl: "http://localhost:2333/ImgStore/9.jpg",
+         title: "Fate / Grand Order 贞德 3段阶目",
+         upname: 'ALTER',
+         imageUrl: "http://localhost:2333/ImgStore/22.jpg",
        },
        {
          id:123,
-         coverUrl: "https://i0.hdslb.com/bfs/archive/bd32aee10921815e6cb788858e4c1531609f5132.jpg@625w_312h.jpg",
-         title: "jfdfhjsdhfj",
-         imageUrl: "https://i0.hdslb.com/bfs/sycp/creative_img/202012/29f6dbfb63f6d29025e4bf7501eb6b89.jpg@625w_312h.jpg",
-       },
-       {
-         id:123,
-         coverUrl: "https://i0.hdslb.com/bfs/archive/bd32aee10921815e6cb788858e4c1531609f5132.jpg@625w_312h.jpg",
-         title: "jfdfhjsdhfj",
-         imageUrl: "https://i0.hdslb.com/bfs/sycp/creative_img/202012/29f6dbfb63f6d29025e4bf7501eb6b89.jpg@625w_312h.jpg",
+         coverUrl: "http://localhost:2333/ImgStore/15.jpg",
+         title: "figma#SP-129 Type-Moon Racing&GOOD SMILE Racing 尼禄·克劳狄乌斯 赛车女郎Ver.",
+         upname: 'MaxFactory',
+         imageUrl: "http://localhost:2333/ImgStore/22.jpg",
        },
      ],
    }

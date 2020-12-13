@@ -207,7 +207,7 @@ export default {
 
   .h1{
     margin-top: 100px;
-    margin-left: 150px;
+    margin-left: 250px;
     color: #ffffff;
     font-weight: bold;
     font-size: 30px;

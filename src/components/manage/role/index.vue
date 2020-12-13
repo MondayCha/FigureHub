@@ -83,7 +83,7 @@ export default {
   data() {
     return {
       pagination: {
-        defaultPageSize: 7,
+        defaultPageSize: 4,
         showTotal: (total) => `共${total}条数据`,
       },
       columns: [
@@ -110,6 +110,12 @@ export default {
           dataIndex: "intro",
           key: "intro",
           // width: "45%",
+        },
+        {
+          title: "作品",
+          dataIndex: "workName",
+          key: "workName",
+          width: "10%",
         },
         {
           title: "操作",
@@ -252,6 +258,7 @@ export default {
           roleName: values.roleName,
           gender: values.gender,
           intro: values.intro,
+          workName: values.workName,
         };
         axios_service.put_with_params(this.$store, "/role/update?", params).then((res) => {
           console.log(res);
@@ -274,6 +281,7 @@ export default {
           roleName: values.roleName,
           gender: values.gender,
           intro: values.intro,
+          workName: values.workName,
         };
         axios_service.post_with_params(this.$store, "/role/insert?", params).then((res) => {
           console.log(res);

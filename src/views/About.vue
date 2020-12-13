@@ -5,7 +5,11 @@
       <div class="s-skin-container"></div>
       <div class="heroContent">
         <div class="h1">Figure Hub</div>
-        集搜索、销售、二手交易、用户分享于一体的手办交易平台
+        <p>
+          集搜索、销售、二手交易、用户分享于一体的手办交易平台</p>
+        <p>18373483周一扬</p>
+        <p>18373528杨凌华</p>
+        <p>18373580李亦龙</p>
       </div>
     </a-layout>
   </a-layout>

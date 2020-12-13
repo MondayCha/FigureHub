@@ -1,8 +1,8 @@
 <template>
   <a-layout>
-    <MySidebar head_index="7"/>
+    <MySidebar head_index="8"/>
     <a-layout class="pbbml">
-      <MyBread first="手办交易" second="我卖出的"/>
+      <MyBread first="手办交易" second="交易管理"/>
       <OrderSellCollection/>
     </a-layout>
   </a-layout>
@@ -11,7 +11,7 @@
 import MyHeader from "../layout/myheader";
 import MySidebar from "../layout/mysidebar";
 import MyBread from "../layout/mybreadcrumb"
-import OrderSellCollection from "@/components/manage/OrderSell"
+import OrderSellCollection from "@/components/manage/Order"
 
 export default {
   name: 'Work',

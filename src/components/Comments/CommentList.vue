@@ -8,7 +8,7 @@
             <a-form-item>
               <a-textarea :rows="2" value="登录后方可评论" disabled/>
             </a-form-item>
-            <a-form-item style="text-align: left">
+            <a-form-item style="text-align: right">
               <a-button html-type="submit" type="primary" shape="round" disabled>
                 新增评论
               </a-button>
@@ -22,6 +22,7 @@
               slot="avatar"
               :src="$store.state.user.avatar"
               :alt="$store.state.user.nickname"
+              size="large"
           />
           <div slot="content">
             <a-form-item>

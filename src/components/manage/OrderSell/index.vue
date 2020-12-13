@@ -3,14 +3,6 @@
     <div class="flextitle">
     </div>
     <div>
-      <a-modal
-          title="确认收货"
-          :visible="visible"
-          @ok="handleOk(1)"
-          @cancel="handleCancel"
-      >
-        <p>要确认收货吗？确认后不可撤销！</p>
-      </a-modal>
       <a-table
           bordered
           :pagination="pagination"
@@ -20,9 +12,6 @@
           rowKey="dealId"
       >
         <template slot="operation" slot-scope="text, record">
-          <a-button type="link" @click="confirmModal(record)" v-if="record.status===0">确认收货</a-button>
-          <a-button type="link" @click="commentModal(record)" v-else-if="record.status===1">我要评论</a-button>
-          <a-button type="link" @click="showComModal(record)" v-else>查看评论</a-button>
           <a-popconfirm
               v-if="data.length"
               title="确定要取消此交易吗?"
@@ -34,13 +23,6 @@
           </a-popconfirm>
         </template>
       </a-table>
-      <update-form
-          ref="updateForm"
-          :visible="updatevisible"
-          :recorder="updateRecorder"
-          @cancel="updateCancel"
-          @create="updateCreate"
-      />
     </div>
   </div>
 </template>
@@ -69,9 +51,9 @@ export default {
           width: "5%",
         },
         {
-          title: "卖家",
-          dataIndex: "seller",
-          key: "seller",
+          title: "买家",
+          dataIndex: "buyer",
+          key: "buyer",
           width: "10%",
         },
         {
@@ -90,10 +72,11 @@ export default {
           title: "状态",
           dataIndex: "statusStr",
           key: "statusStr",
+          width: "5%",
         },
         {
           title: "操作",
-          width: "20%",
+          width: "10%",
           dataIndex: "operation",
           scopedSlots: {
             customRender: "operation",
@@ -110,20 +93,6 @@ export default {
     };
   },
   methods: {
-    showComModal(record) {
-      axios_service.get("dealcomment/selectByDealId?dealId=" + record.dealId,null).then((res) => {
-        console.log(res[0]);
-        const h = this.$createElement;
-        this.$info({
-          title: '查看评论',
-          content: h('div', {}, [
-            h('p', res[0].content),
-          ]),
-          onOk() {
-          },
-        });
-      });
-    },
     formData() {
       for (let i = 0; i < this.data.length; i++) {
         let tmp_gender = this.data[i].status;
@@ -135,10 +104,6 @@ export default {
           this.data[i].statusStr = "待收货";
         }
       }
-    },
-    selectChange(value) {
-      this.searchType = value;
-      console.log(this.searchType);
     },
     onCellChange(key, dataIndex, value) {
       const dataSource = [...this.dataSource];
@@ -177,45 +142,10 @@ export default {
     updateCancel() {
       this.updatevisible = false;
     },
-    updateCreate() {
-      const form = this.$refs.updateForm.form;
-      form.validateFields((err, values) => {
-        if (err) {
-          return;
-        }
-        let params = {
-          dealId: this.updateRecorder.dealId,
-          content: values.content,
-        };
-        axios_service.post_with_params(this.$store, "/dealcomment/insert?", params).then((res) => {
-          console.log(res);
-          let _this = this;
-          _this.loading = true;
-          this.handleOk(2);
-          _this.queryTable();
-        });
-        form.resetFields();
-        this.updatevisible = false;
-      });
-    },
-    handleOk(status) {
-      axios_service.put_with_params(this.$store, "/deal/update?", {
-        dealId: this.updateRecorder.dealId,
-        "status": status,
-        "seller": this.updateRecorder.seller,
-        "merchandiseId": this.updateRecorder.merchandiseId,
-      }).then((res) => {
-        console.log(res);
-        let _this = this;
-        _this.loading = true;
-        _this.queryTable();
-        _this.visible = false;
-      });
-    },
     queryTable() {
       let _this = this;
       _this.loading = true;
-      axios_service.get_with_params(this.$store, "/deal/selectByBuyer?buyer=" + this.$store.state.user.userID, null).then((res) => {
+      axios_service.get_with_params(this.$store, "/deal/selectBySeller?seller=" + this.$store.state.user.userID, null).then((res) => {
         //将返回的数据存入页面中声明的data中
         console.log(res);
         _this.data = res;

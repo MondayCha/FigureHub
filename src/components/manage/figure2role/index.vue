@@ -2,13 +2,15 @@
   <div>
     <div class="flextitle">
       <div>
-        <a-button type="primary" @click="addItem(true)" shape="round">添加</a-button>
+        <a-button type="primary" @click="addItem(true)" shape="round">添加角色关系</a-button>
+        <a-button @click="addItem(true)" shape="round">添加对应作品</a-button>
       </div>
       <div>
         <a-input-group style="width: 400px">
           <a-select default-value="0" style="width: 25%" @change="selectChange">
             <a-select-option value="0"> 手办名称</a-select-option>
             <a-select-option value="1"> 对应角色</a-select-option>
+            <a-select-option value="2"> 对应作品</a-select-option>
           </a-select>
           <a-input-search
               style="width: 75%"
@@ -115,6 +117,7 @@ export default {
       updateRecorder: {},
       roleList: [],
       figureList: [],
+      workList: [],
     };
   },
   methods: {
@@ -145,11 +148,14 @@ export default {
         _this.figureList = res1;
         axios_service.get_with_params(this.$store, "/role/selectAll", null).then((res2) => {
           _this.roleList = res2;
-          if (modelOfUpdate) {
-            _this.visible = true;
-          } else {
-            _this.updatevisible = true;
-          }
+          axios_service.get("/work/selectAll", null).then((res3) => {
+            _this.workList = res3;
+            if (modelOfUpdate) {
+              _this.visible = true;
+            } else {
+              _this.updatevisible = true;
+            }
+          });
         }).catch(function (error) {
           console.log("role fail");
         });
@@ -248,6 +254,22 @@ export default {
         _this.visible = false;
       });
     },
+    async getList() {
+      let _this = this;
+      axios_service.get_with_params(this.$store, "/figure/selectAll", null).then((res1) => {
+        _this.figureList = res1;
+        axios_service.get_with_params(this.$store, "/role/selectAll", null).then((res2) => {
+          _this.roleList = res2;
+          axios_service.get("/work/selectAll", null).then((res3) => {
+            _this.workList = res3;
+          });
+        }).catch(function (error) {
+          console.log("role fail");
+        });
+      }).catch(function (error) {
+        console.log("figure fail");
+      });
+    },
     queryTable() {
       let _this = this;
       _this.loading = true;
@@ -255,20 +277,13 @@ export default {
         //将返回的数据存入页面中声明的data中
         _this.data = response;
         _this.loading = false;
-      })
-          .catch(function (error) {
-            console.log("error case!");
-            _this.$notification.open({
-              message: "无法获取关系表格数据",
-              icon: <a-icon type="warning" style="color: #ff1820"/>,
-              description:
-                  "请检查后端是否正常运行，是否允许跨域；或修改main.js中的axios全局参数，以匹配后端Api",
-              duration: 10,
-            });
-          });
+      }).catch(function (error) {
+        this.$message.error("error case!");
+      });
     },
   },
   created() {
+    this.getList();
     this.queryTable();
     console.log(this.data);
   },

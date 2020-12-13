@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         logged_in: false,
+        search_item: '',
         user: {
             nickname: "",
             type: 1,
@@ -38,6 +39,9 @@ export default new Vuex.Store({
         },
         routeToSale(state, data) {
             state.sale = data;
+        },
+        commitSearch(state, data) {
+            state.search_item = data;
         }
     },
     actions: {},

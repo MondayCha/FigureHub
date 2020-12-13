@@ -33,6 +33,19 @@
             <a-form-model-item label="昵称" prop="nickname">
               <a-input v-model="registerForm.nickname"/>
             </a-form-model-item>
+            <a-form-model-item label="类型" prop="type">
+              <a-radio-group default-value="1" button-style="solid" v-model="registerForm.type">
+                <a-radio-button value="1">
+                  注册用户
+                </a-radio-button>
+                <a-radio-button value="0">
+                  管理员
+                </a-radio-button>
+                <a-radio-button value="2">
+                  厂商用户
+                </a-radio-button>
+              </a-radio-group>
+            </a-form-model-item>
             <a-form-model-item label="头像" prop="avatar">
               <a-upload
                   name="avatar"
@@ -171,6 +184,7 @@ export default {
         nickname: '',
         // gender: 'unset',
         sign: '',
+        type: 0,
       },
       rules: {
         username: [{validator: validateUsername, trigger: 'change'}],
@@ -220,7 +234,7 @@ export default {
             username: _this.registerForm.username,
             password: _this.registerForm.pass,
             nickname: _this.registerForm.nickname,
-            type: 1
+            type: _this.registerForm.type,
           }
           axios_service.register(_this.store, "/user/register", params, _this.file)
               .then((res) => {

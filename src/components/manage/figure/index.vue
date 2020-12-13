@@ -112,6 +112,12 @@ export default {
           width: "10%",
         },
         {
+          title: "厂商",
+          dataIndex: "manuName",
+          key: "manuName",
+          width: "10%",
+        },
+        {
           title: "操作",
           width: "20%",
           dataIndex: "operation",

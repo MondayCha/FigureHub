@@ -244,7 +244,12 @@ export default {
     selectAllPictures() {
       //console.log('准备搜集所有图片...')
       let _this = this;
-      axios_service.get("sale/selectAll", null).then((res) => {
+      let search_url = "sale/selectAll";
+      if (this.$store.state.search_item != '') {
+        search_url = "sale/selectByFigureName?figureName=" + this.$store.state.search_item;
+        this.$store.commit('commitSearch', '');
+      }
+      axios_service.get(search_url, null).then((res) => {
         console.log("liost is ", res);
         _this.goodList = res;
         this.getCard(_this.goodList).then((res) => {

@@ -39,18 +39,23 @@
         <a-menu-item key="7">
           <router-link to="/manage/ordersell">我卖出的</router-link>
         </a-menu-item>
-        <a-menu-item key="8"> 敬请期待</a-menu-item>
+        <a-menu-item key="8">
+          <router-link to="/manage/ordersell">我发布的</router-link>
+        </a-menu-item>
+        <a-menu-item key="9" v-if="this.$store.state.user.type===0">
+          <router-link to="/manage/all">交易管理</router-link>
+        </a-menu-item>
       </a-sub-menu>
-      <a-sub-menu key="sub3">
-        <span slot="title"><a-icon type="gift"/>画个大饼</span>
-        <a-menu-item key="9"> 敬请期待</a-menu-item>
-        <a-menu-item key="10"> 敬请期待</a-menu-item>
-      </a-sub-menu>
-      <a-sub-menu key="sub4">
-        <span slot="title"><a-icon type="loading"/>正在加载</span>
-        <a-menu-item key="11"> 敬请期待</a-menu-item>
-        <a-menu-item key="12"> 敬请期待</a-menu-item>
-      </a-sub-menu>
+<!--      <a-sub-menu key="sub3">-->
+<!--        <span slot="title"><a-icon type="gift"/>画个大饼</span>-->
+<!--        <a-menu-item key="9"> 敬请期待</a-menu-item>-->
+<!--        <a-menu-item key="10"> 敬请期待</a-menu-item>-->
+<!--      </a-sub-menu>-->
+<!--      <a-sub-menu key="sub4">-->
+<!--        <span slot="title"><a-icon type="loading"/>正在加载</span>-->
+<!--        <a-menu-item key="11"> 敬请期待</a-menu-item>-->
+<!--        <a-menu-item key="12"> 敬请期待</a-menu-item>-->
+<!--      </a-sub-menu>-->
     </a-menu>
   </a-layout-sider>
 </template>

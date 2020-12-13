@@ -55,6 +55,10 @@
             v-decorator="['intro', { initialValue: recorder.intro }]"
           />
         </a-form-item>
+        <a-form-item label="作品">
+          <a-input
+              v-decorator="['workName', { initialValue: recorder.workName }]" />
+        </a-form-item>
       </a-form>
     </a-modal>
   </div>

@@ -17,14 +17,14 @@
         {{watchlater ? '已添加' : '稍后再看'}}
       </div>
     </div>
-    <h1 class="title" :title="title">【BANDAI】手办沙虎鲨{{this.data.title}}</h1>
+    <h1 class="title" :title="title">{{this.data.title}}</h1>
     <div class="topics" v-if="topics && topics.length">
       <a
         class="topic"
         v-for="topic of topics.slice(0,3)"
         :key="topic.id"
         target="_blank"
-        :href="'https://t.bilibili.com/topic/name/' + topic.name + '/feed'"
+        href="、"
       >#iii#</a>
     </div>
     <p class="description" :title="description" v-else>{{this.data.title}}</p>
@@ -32,31 +32,32 @@
       class="up"
       :class="{'no-face': !upFaceUrl}"
       target="_blank"
-      :href="upID ? ('https://space.bilibili.com/' + upID) : null"
+      href="/"
     >
       <dpi-img v-if="upFaceUrl" class="face" :src="upFaceUrl" :size="24"></dpi-img>
       <Icon v-else icon="up" type="extended"></Icon>
-      <div class="name" :title="upName">{{this.data.title}}</div>
+      <div class="name" :title="upName">{{this.data.upname}}</div>
     </a>
     <div class="stats">
-      <template v-if="like && !vertical">
-        <Icon type="extended" icon="like-outline"></Icon>
-        {{like}}
-      </template>
-      <template v-if="coins && !vertical">
-        <Icon type="home" icon="coin-outline"></Icon>
-        {{coins}}
-      </template>
-      <template v-if="favorites">
-        <Icon type="home" icon="favorites-outline"></Icon>
-        {{favorites}}
-      </template>
-      <Icon type="extended" icon="play"></Icon>
-      {{playCount}}
-      <template v-if="danmakuCount">
-        <Icon type="extended" icon="danmaku"></Icon>
-        {{danmakuCount}}
-      </template>
+<!--      <a-icon type="like"></a-icon>-->
+<!--      <template v-if="like && !vertical">-->
+<!--        <Icon type="extended" icon="like-outline"></Icon>-->
+<!--        {{like}}-->
+<!--      </template>-->
+<!--      <template v-if="coins && !vertical">-->
+<!--        <Icon type="home" icon="coin-outline"></Icon>-->
+<!--        {{coins}}-->
+<!--      </template>-->
+<!--      <template v-if="favorites">-->
+<!--        <Icon type="home" icon="favorites-outline"></Icon>-->
+<!--        {{favorites}}-->
+<!--      </template>-->
+
+<!--      {{playCount}}-->
+<!--      <template v-if="danmakuCount">-->
+<!--        <Icon type="extended" icon="danmaku"></Icon>-->
+<!--        {{danmakuCount}}-->
+<!--      </template>-->
     </div>
   </a>
 </template>

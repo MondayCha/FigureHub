@@ -1,49 +1,60 @@
 <template>
   <a-layout style="background-color: #fff">
     <MyHeader></MyHeader>
-    <div class="info">
-      <div class="info-with-avatar">
-        <div class="basic-info">
-          <a-descriptions title="用户信息"
-                          :column="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }"
-                          :colon="false">
-            <a-descriptions-item label="昵称">
-              {{ user.nickname }}
-            </a-descriptions-item>
-            <a-descriptions-item label="用户名">
-              {{ user.username }}
-            </a-descriptions-item>
-            <a-descriptions-item label="用户类型">
-              <template v-if="user.type == '1'">
-                <a-tag color="orange">注册用户</a-tag>
-              </template>
-              <template v-else-if="user.type == '0'">
-                <a-tag color="green">管理员</a-tag>
-              </template>
-              <template v-else="user.type == '1'">
-                <a-tag color="purple">厂商用户</a-tag>
-              </template>
-            </a-descriptions-item>
-          </a-descriptions>
-        </div>
-        <a-avatar class="info-avatar" shape="circle" :size="120" :src="this.$global.staticURL + user.imgpath"/>
-      </div>
+    <a-layout style="background-color: #ffffff;">
+      <a-row :gutter="20" style="margin-left: 10%; margin-right: 10%; margin-top: 40px; margin-bottom: 10%">
+        <a-col :span="2">
+        </a-col>
+        <a-col :span="20">
+          <div class="info">
+            <div class="info-with-avatar">
+              <div class="basic-info">
+                <a-descriptions title="用户信息"
+                                :column="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }"
+                                :colon="false"
+                >
+                  <a-descriptions-item label="昵称" class="dstrong">
+                    {{ user.nickname }}
+                  </a-descriptions-item>
+                  <a-descriptions-item label="用户名" class="dstrong">
+                    {{ user.username }}
+                  </a-descriptions-item>
+                  <a-descriptions-item label="用户类型" class="dstrong">
+                    <template v-if="user.type == '1'">
+                      <a-tag color="orange">注册用户</a-tag>
+                    </template>
+                    <template v-else-if="user.type == '0'">
+                      <a-tag color="green">管理员</a-tag>
+                    </template>
+                    <template v-else="user.type == '1'">
+                      <a-tag color="purple">厂商用户</a-tag>
+                    </template>
+                  </a-descriptions-item>
+                </a-descriptions>
+              </div>
+              <a-avatar class="info-avatar" shape="circle" :size="120" :src="this.$global.staticURL + user.imgpath"/>
+            </div>
 
-      <div class="user-actions">
-        <a-tabs default-active-key="1" @change="tabChangeCallback">
-          <a-tab-pane key="1" tab="用户评论">
-            <CommentList
-                :object_info="this_object_info"
-                :ready="true"
-                :add-model="false"
-            ></CommentList>
-          </a-tab-pane>
-          <a-tab-pane key="2" tab="用户收藏">
-            <status-list></status-list>
-          </a-tab-pane>
-        </a-tabs>
-      </div>
-    </div>
+            <div class="user-actions">
+              <a-tabs default-active-key="1" @change="tabChangeCallback">
+                <a-tab-pane key="1" tab="用户评论">
+                  <CommentList
+                      :object_info="this_object_info"
+                      :ready="true"
+                      :add-model="false"
+                  ></CommentList>
+                </a-tab-pane>
+                <a-tab-pane key="2" tab="用户收藏">
+                  <CollectList></CollectList>
+                </a-tab-pane>
+              </a-tabs>
+            </div>
+          </div>
+        </a-col>
+        <a-col :span="2">
+        </a-col>
+      </a-row>
+    </a-layout>
   </a-layout>
 </template>
 
@@ -51,6 +62,7 @@
 import MyHeader from "@/views/layout/myheader";
 import axios_service from "@/api/request";
 import CommentList from "@/components/Comments/CommentList"
+import CollectList from "@/components/Collect/Collect"
 
 const payment_info = {
   amount: 98,
@@ -62,7 +74,8 @@ const payment_info = {
 export default {
   components: {
     MyHeader,
-    CommentList
+    CommentList,
+    CollectList,
   },
   name: "User",
   data: function () {
@@ -133,7 +146,7 @@ export default {
   watch: {
     $route(to, from) {
       this.user_id = to.params.id;
-      if(!this.user_id){
+      if (!this.user_id) {
         this.user_id = this.$store.state.user.userID;
       }
       this.this_object_info.obj_id = this.user_id;
@@ -142,7 +155,7 @@ export default {
   },
   created() {
     this.user_id = this.$route.params.id;
-    if(!this.user_id){
+    if (!this.user_id) {
       this.user_id = this.$store.state.user.userID;
     }
     this.this_object_info.obj_id = this.user_id;
@@ -152,6 +165,11 @@ export default {
 </script>
 
 <style scoped>
+/deep/ .ant-descriptions-item-label {
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.5);
+}
+
 .info {
   background-color: #ffffff;
   margin-left: 64px;

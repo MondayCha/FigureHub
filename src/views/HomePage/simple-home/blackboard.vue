@@ -2,8 +2,8 @@
   <div class="blackboards">
     <div class="header">
       <!--      <a-button @click="updateIndex"></a-button>-->
-      <div class="title">每日推荐</div>
-      <a class="more" href="https://www.bilibili.com/blackboard/x/act_list/" target="_blank">
+      <div class="title">今日推荐</div>
+      <a class="more" @click="routeToShop" target="_blank">
         <a-icon class="be-icon" type="ellipsis"/>
         更多
       </a>
@@ -28,7 +28,7 @@
           :href="b.url"
           :title="b.title"
       >
-        <dpi-img :src="b.imageUrl" :alt="b.title" :size="{width: 500, height: 250}" :root="cardsContainer"></dpi-img>
+        <img :src="b.imageUrl" style="width: 100%; max-width: 100%; height: auto;"/>
         <div class="title">{{ b.title }}</div>
       </a>
     </div>
@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import axios_service from "@/api/request";
+
 export default {
   components: {
     matIcon: () => import('../../icon.vue'),
@@ -51,26 +53,35 @@ export default {
       val: [false, true, false],
       blackboards: [
         {
-          title: "jfdfhjsdhfj",
-          url: "https://i0.hdslb.com/bfs/archive/bd32aee10921815e6cb788858e4c1531609f5132.jpg@625w_312h.jpg",
-          imageUrl: "https://i0.hdslb.com/bfs/sycp/creative_img/202012/29f6dbfb63f6d29025e4bf7501eb6b89.jpg@625w_312h.jpg",
+          title: "剧场版动画《刀剑神域 进击篇》即将在2021年上映",
+          url: "http://localhost:2333/ImgStore/LIGHT%20Insanae.jpg",
+          imageUrl: this.$global.staticURL + "亚斯娜1.jpg",
         },
         {
-          title: "nihihs",
-          url: "https://i0.hdslb.com/bfs/archive/bd32aee10921815e6cb788858e4c1531609f5132.jpg@625w_312h.jpg",
-          imageUrl: "https://i0.hdslb.com/bfs/archive/bd32aee10921815e6cb788858e4c1531609f5132.jpg@625w_312h.jpg",
+          title: "剧场版动画《刀剑神域 进击篇》即将在2021年上映",
+          url: this.$global.wikiURL + "亚斯娜2.jpg",
+          imageUrl: "http://localhost:2333/ImgStore/LIGHT%20Insanae.jpg",
         },
         {
-          title: "jfdfhjsdhfj",
-          url: "https://i0.hdslb.com/bfs/archive/bd32aee10921815e6cb788858e4c1531609f5132.jpg@625w_312h.jpg",
-          imageUrl: "https://i0.hdslb.com/bfs/sycp/creative_img/202012/29f6dbfb63f6d29025e4bf7501eb6b89.jpg@625w_312h.jpg",
+          title: "剧场版动画《刀剑神域 进击篇》即将在2021年上映",
+          url: this.$global.staticURL + "亚斯娜3.jpg",
+          imageUrl: this.$global.staticURL + "亚斯娜3.jpg",
         },
       ],
       interval: 0,
       inputIndex: 0,
     }
   },
+  created() {
+    axios_service.get("roleimg/selectAll", null).then((res) => {
+      console.log(res);
+
+    });
+  },
   methods: {
+    routeToShop() {
+      this.$router.push("/market");
+    },
     updateIndex() {
       // // console.log("click button");
       // var boards = document.getElementsByClassName('hidden-input');

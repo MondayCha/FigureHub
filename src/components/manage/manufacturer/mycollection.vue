@@ -239,12 +239,7 @@ export default {
           })
           .catch(function (error) {
             console.log("error case!");
-            _this.$notification.open({
-              message: "无法获取表格数据",
-              icon: <a-icon type = "warning" style = "color: #ff1820" / >,
-              description: "请检查后端是否正常运行，是否允许跨域；或修改main.js中的axios全局参数，以匹配后端Api",
-              duration:10,
-          });
+            _this.$message.error("无法获取表格数据");
           });
     },
   },

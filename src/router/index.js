@@ -29,6 +29,11 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/Wiki/wiki'),
     },
     {
+        path: '/wiki/:wiki_type/:wiki_id',
+        name: 'Wikiitem',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Wiki/wikiItem.vue'),
+    },
+    {
         path: '/login',
         name: 'Login',
         component: Login
@@ -86,7 +91,13 @@ const routes = [
                 path: 'ordersell',
                 name: 'ordersell',
                 component: () => import('../views/manage/OrderSell.vue'),
-                meta: {title: 'ordersell'}
+                meta: {title: 'osell'}
+            },
+            {
+                path: 'all',
+                name: 'all',
+                component: () => import('../views/manage/All.vue'),
+                meta: {title: 'all'}
             },
         ]
     },
