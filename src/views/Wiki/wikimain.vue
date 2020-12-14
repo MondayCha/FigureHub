@@ -14,7 +14,7 @@
           height="300"
           style="object-fit: cover"
           alt="logo"
-          src="http://localhost:2333/ImgStore/%E4%BA%9A%E6%96%AF%E5%A8%9C3.jpg"
+          :src="item.src"
       />
       <a-list-item-meta :description="item.intro">
         <div slot="title" @click="jumpToRole(item.roleId)">{{ item.roleName }}</div>
@@ -63,6 +63,9 @@ export default {
       //将返回的数据存入页面中声明的data中
       console.log(res);
       _this.data = res;
+      _this.data[0].src='http://localhost:2333/ImgStore/%E4%BA%9A%E6%96%AF%E5%A8%9C3.jpg';
+      _this.data[1].src='http://localhost:2333/ImgStore/%E5%88%9D%E9%9F%B3%E6%9C%AA%E6%9D%A53.jpg';
+      _this.data[2].src='http://localhost:2333/ImgStore/4.jpg';
       _this.formData();
     });
   },

@@ -22,7 +22,7 @@
               <!--            </div>-->
               <div style="margin-top: 20px; padding-left: 20px; text-align: left">
                 <div class="h1title">
-                  {{ this.$store.state.sale.title }}
+                  {{ this.$store.state.wiki_name }}
                 </div>
               </div>
             </div>

@@ -25,7 +25,7 @@
                   </div>
                   <div class="tagdiv">
                     <a-tag v-for="(tag,index) in tagContent" :key="index"
-                           :color="tag.color" @click="clickTag(tag.url)">{{ tag.content }}
+                           :color="tag.color" @click="clickTag(tag.content, tag.url)">{{ tag.content }}
                     </a-tag>
                   </div>
                 </a-col>
@@ -59,8 +59,7 @@
                 <div style=" width: 90px">
                   <dpi-img :src="this.$store.state.sale.owner_url"
                            class="el-avatar el-avatar--circle"
-                           style="height: 80px; width: 80px"
-                           @click="skipToPainterPage"></dpi-img>
+                           style="height: 80px; width: 80px"></dpi-img>
                 </div>
                 <!--      个人介绍-->
                 <div style="margin-left: 20px">
@@ -74,7 +73,7 @@
                   style="letter-spacing: 3px">查看主页</b></a-button>
               <a-modal
                   v-model="modalVisible"
-                  title="订单"
+                  title="发起订单"
                   centered
                   width="1000px"
               >
@@ -90,42 +89,76 @@
                     完成
                   </a-button>
                 </template>
-                <a-steps :current="current">
-                  <a-step v-for="item in steps" :key="item.title" :title="item.title"/>
-                </a-steps>
-                <div class="steps-content">
-                  <template v-if="current === 0">
-                    <div style="margin-top: 100px; margin-bottom: 100px; margin-left: 250px">
-                      <font style="font-size:20px">卖家： {{ this.$store.state.sale.owner }}</font>
-                      <br>
-                      <font style="font-size:20px">商品名： {{ this.$store.state.sale.title }}</font>
-                      <br>
-                      <font style="font-size:20px">价格 ： ￥{{ this.$store.state.sale.price }}</font>
-                    </div>
-                  </template>
-                  <template v-if="current === 1">
-                    <div style="margin-top: 10px">
-                      <font style="font-size:15px">订单号：</font>
-                    </div>
-                    <div style="text-align: center">
-                      <img src="" style="width:300px; height: 300px; margin-top: 20px">
-                      <br>
-                      <font style="font-size:30px">￥</font>
-                    </div>
-                  </template>
-                  <template v-if="current === 2">
-                    <div style="margin-top: 100px; margin-bottom: 100px">
-                      <div style="text-align: center">
-                        <a-icon type="loading" style="font-size: 100px"/>
+                <div class="centered-block">
+                  <a-steps :current="current" style="">
+                    <a-step v-for="item in steps" :key="item.title" :title="item.title"/>
+                  </a-steps>
+                  <div class="steps-content">
+                    <template v-if="current === 0">
+                      <!--                    <div style="margin-top: 100px; margin-bottom: 100px; margin-left: 250px">-->
+                      <!--                      <font style="font-size:20px">卖家： {{ this.$store.state.sale.owner }}</font>-->
+                      <!--                      <br>-->
+                      <!--                      <font style="font-size:20px">商品名： {{ this.$store.state.sale.title }}</font>-->
+                      <!--                      <br>-->
+                      <!--                      <font style="font-size:20px">价格 ： ￥{{ this.$store.state.sale.price }}</font>-->
+                      <!--                    </div>-->
+                      <div style="margin-top: 5%">
+                        <div class="info">
+                          <a-statistic class="info-item" title="订单内容" :value="this.$store.state.sale.title"
+                          />
+                          <a-statistic class="info-item" title="金额(CNY)" :precision="2"
+                                       :value="this.$store.state.sale.price">
+                            <template #prefix>
+                              ￥
+                            </template>
+                          </a-statistic>
+                          <a-statistic class="info-item" title="卖方" groupSeparator=""
+                                       :value="this.$store.state.sale.owner"/>
+                        </div>
                       </div>
-                      <p style="text-align: center; margin-top: 30px">
-                        <font style="font-size: 20px">确认支付结果中...</font>
-                      </p>
-                    </div>
-                  </template>
-                  <template v-if="current === 3">
-                    <p>完成</p>
-                  </template>
+                    </template>
+                    <template v-if="current === 1">
+                      <div style="margin-top: 10px">
+                        <font style="font-size:15px">订单号：</font>
+                      </div>
+                      <div style="text-align: center">
+                        <img src="https://s3.ax1x.com/2020/12/14/rnMEKe.jpg"
+                             style="width:300px; height: 300px; margin-top: 20px">
+                        <br>
+                      </div>
+                    </template>
+                    <template v-if="current === 2">
+                      <div style="margin-top: 100px; margin-bottom: 100px">
+                        <div style="text-align: center">
+                          <a-spin style="font-size: 100px">
+                            <a-icon slot="indicator" type="loading" style="font-size: 64px" spin/>
+                          </a-spin>
+                        </div>
+                        <p style="text-align: center; margin-top: 30px">
+                          <font style="font-size: 20px">确认支付结果中...</font>
+                        </p>
+                      </div>
+                    </template>
+                    <template v-if="current === 3">
+                      <div style="margin-top: 5%">
+                        <!--                        <a-statistic class="info-item" title="订单编号" groupSeparator=""-->
+                        <!--                                     :value="this.$store.state.sale.owner"/>-->
+                        <!--                        <a-statistic class="info-item" title="订单内容" :value="this.$store.state.sale.title"-->
+                        <!--                        />-->
+                        <!--                        <a-statistic class="info-item" title="金额(CNY)" :precision="2"-->
+                        <!--                                     :value="this.$store.state.sale.price">-->
+                        <!--                          <template #prefix>-->
+                        <!--                            ￥-->
+                        <!--                          </template>-->
+                        <!--                        </a-statistic>-->
+                        <a-result
+                            status="success"
+                            title="支付成功！"
+                        >
+                        </a-result>
+                      </div>
+                    </template>
+                  </div>
                 </div>
               </a-modal>
             </div>
@@ -255,6 +288,8 @@ export default {
       buyMembershipShow: false,
       current_tab: 1,
       introduction: String,
+      successDealId: 0,
+      clickedCollect: false,
     };
   },
   watch: {
@@ -317,10 +352,16 @@ export default {
       this.$router.push('/user/' + this.$store.state.sale.owner_id)
     },
     collect() {
+      let _this = this;
       axios_service.post_with_params(this.$store, "collection/insert?", {
         'merchandiseId': this.$store.state.sale.merchandise_id,
       }).then((res) => {
-        this.$message.success('收藏成功');
+        if (_this.clickedCollect === false) {
+          _this.$message.success('收藏成功');
+          _this.clickedCollect = true;
+        } else {
+          _this.$message.warning('已取消');
+        }
       }).catch((e) => {
         this.$message.error('收藏失败');
       });
@@ -333,7 +374,7 @@ export default {
           'seller': this.$store.state.sale.owner_id,
           'merchandiseId': this.$store.state.sale.merchandise_id,
         }).then((response) => {
-          console.log(response.data);
+          console.log("res of deal", response.data);
         }).catch((e) => {
           this.$notification.error({
             message: '购买失败',
@@ -344,15 +385,17 @@ export default {
       }
       if (this.current === 2) {
         this.disable = true;
-        axios_service.get("deal/selectByMerchandiseId?merchandiseid=" + this.$store.state.sale.merchandise_id).then((res) => {
-          setTimeout(() => {
-            this.disable = false;
-            this.current++;
-            this.$message.success("支付成功!")
-          }, 2000);
-        }).catch((err) => {
-          this.disable = true;
-        })
+        setTimeout(() => {
+          this.disable = false;
+          this.current++;
+          this.$message.success("支付成功!")
+        }, 1000);
+        // axios_service.get("deal/selectByMerchandiseId?merchandiseid=" + this.$store.state.sale.merchandise_id).then((res) => {
+        //   console.log("ressssssssssss ",res)
+        //
+        // }).catch((err) => {
+        //   this.disable = true;
+        // })
       }
     },
     buyDone() {
@@ -363,7 +406,8 @@ export default {
     handleBuy() {
       this.modalVisible = true;
     },
-    clickTag(url) {
+    clickTag(head, url) {
+      this.$store.commit("wikiName", head);
       this.$router.push("/wiki/" + url);
     }
   }
@@ -473,6 +517,20 @@ export default {
 
 .tagdiv /deep/ .ant-tag {
   margin-bottom: 8px;
+}
+
+.centered-block {
+  width: 90%;
+  margin: 16px auto;
+}
+
+.info-item {
+  margin: 16px 0px;
+  font-size: 16px;
+  font-weight: bold;
+  overflow: hidden;
+  justify-self: stretch;
+  text-overflow: ellipsis;
 }
 </style>
 

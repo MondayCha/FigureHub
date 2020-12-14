@@ -7,6 +7,7 @@ export default new Vuex.Store({
     state: {
         logged_in: false,
         search_item: '',
+        wiki_name: '',
         user: {
             nickname: "",
             type: 1,
@@ -42,6 +43,10 @@ export default new Vuex.Store({
         },
         commitSearch(state, data) {
             state.search_item = data;
+        },
+        wikiName(state, data) {
+            console.log("wiki name is ", data)
+            state.wiki_name = data;
         }
     },
     actions: {},

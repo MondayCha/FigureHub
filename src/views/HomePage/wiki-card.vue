@@ -2,20 +2,12 @@
   <a
     class="video-card"
     target="_blank"
-    :href="epID ? ('https://www.bilibili.com/bangumi/play/ep' + epID) : ('https://www.bilibili.com/av' + aid)"
+    href="http://localhost:8080/#/market/sale=13"
     :class="{vertical: orientation === 'vertical'}"
   >
     <div class="cover-container">
       <dpi-img class="cover" :src="this.data.coverUrl" :size="{height: 120, width: 200}"></dpi-img>
       <div class="duration">{{this.data.title}}</div>
-      <div
-        v-if="durationText && watchlater !== null && watchlater !== undefined"
-        class="watchlater"
-        @click.stop.prevent="toggleWatchlater(aid)"
-      >
-        <i class="mdi" :class="{'mdi-clock-outline': !watchlater, 'mdi-check-circle': watchlater}"></i>
-        {{watchlater ? '已添加' : '稍后再看'}}
-      </div>
     </div>
     <h1 class="title" :title="title">{{this.data.title}}</h1>
     <div class="topics" v-if="topics && topics.length">
@@ -27,7 +19,7 @@
         href="、"
       >#iii#</a>
     </div>
-    <p class="description" :title="description" v-else>{{this.data.title}}</p>
+    <p class="description" :title="this.data.title" v-else>{{this.data.title}}</p>
     <a
       class="up"
       :class="{'no-face': !upFaceUrl}"
