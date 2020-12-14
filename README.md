@@ -1,5 +1,9 @@
 # figurehub
 
+## Introduction
+
+You can read it in [Vue+Antd 东拼西凑实现的仿Bilibili/Pixivic手办百科与交易平台](https://zhuanlan.zhihu.com/p/336716239)
+
 ## Project setup
 ```
 npm install
