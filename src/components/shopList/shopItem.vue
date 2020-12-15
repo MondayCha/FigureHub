@@ -27,6 +27,7 @@
 </template>
 
 <script>
+//部分来源：https://github.com/cheer-fun/pixivic-pc
 
 export default {
   name: "PictureItem",
