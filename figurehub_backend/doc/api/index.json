@@ -1,0 +1,30 @@
+{
+  "resources": [
+    {
+      "name": "Origins",
+      "explanation": null,
+      "examples": [
+        {
+          "description": "Listing Origins",
+          "link": "origins/listing_origins.json",
+          "groups": "all",
+          "route": "/api/origins",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "explanation": null,
+      "examples": [
+        {
+          "description": "When valid request",
+          "link": "users/when_valid_request.json",
+          "groups": "all",
+          "route": "/api/signup",
+          "method": "post"
+        }
+      ]
+    }
+  ]
+}

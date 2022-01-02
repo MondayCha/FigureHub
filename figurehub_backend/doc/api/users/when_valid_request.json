@@ -1,0 +1,77 @@
+{
+  "resource": "Users",
+  "resource_explanation": null,
+  "http_method": "POST",
+  "route": "/api/signup",
+  "description": "When valid request",
+  "explanation": "Sign up a new account.",
+  "parameters": [
+    {
+      "scope": "user",
+      "with_example": true,
+      "required": true,
+      "name": "name",
+      "description": "The User's name (also query id)"
+    },
+    {
+      "scope": "user",
+      "with_example": true,
+      "required": true,
+      "name": "nickname",
+      "description": "The User's nickname"
+    },
+    {
+      "scope": "user",
+      "with_example": true,
+      "required": true,
+      "name": "kind",
+      "description": "0: admin; 1: normal user; 2: company user"
+    },
+    {
+      "scope": "user",
+      "with_example": true,
+      "name": "avatar",
+      "description": "User's avatar"
+    },
+    {
+      "scope": "user",
+      "with_example": true,
+      "required": true,
+      "name": "password",
+      "description": "User's password"
+    }
+  ],
+  "response_fields": [
+
+  ],
+  "requests": [
+    {
+      "request_method": "POST",
+      "request_path": "/api/signup",
+      "request_body": "{\"name\":\"Raye Gutmann\",\"nickname\":\"Melanie Greenholt\",\"kind\":2,\"avatar\":null,\"password\":\"pass\"}",
+      "request_headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Host": "example.org",
+        "Cookie": ""
+      },
+      "request_query_parameters": {
+      },
+      "request_content_type": "application/json",
+      "response_status": 201,
+      "response_status_text": "Created",
+      "response_body": "{\n  \"message\": \"Account created successfully\",\n  \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2NDA4MjcyNjJ9.wmT2n16myyyQh8c7RceisA9PODC-_2LJTaGch7GF25U\"\n}",
+      "response_headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "ETag": "W/\"550a241b4e80b3f4a150a0d91cc7bf09\"",
+        "Cache-Control": "max-age=0, private, must-revalidate",
+        "X-Request-Id": "f14627f6-cc5c-4790-8a88-2f295345945e",
+        "X-Runtime": "0.006909",
+        "Vary": "Origin",
+        "Content-Length": "158"
+      },
+      "response_content_type": "application/json; charset=utf-8",
+      "curl": null
+    }
+  ]
+}

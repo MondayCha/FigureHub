@@ -1,0 +1,13 @@
+stages:
+  - test
+  - deploy
+
+test:
+  stage: test
+  script:
+    - cd figurehub_backend
+    - bundle install
+    - rails db:migrate RAILS_ENV=test
+    - bundle exec rspec
+  only:
+    - project
